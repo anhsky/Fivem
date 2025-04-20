@@ -1,30 +1,13 @@
-# Chọn image Ubuntu cơ bản
-FROM ubuntu:20.04
+#!/bin/bash
+set -e
 
-# Cập nhật và cài đặt các gói cần thiết
-RUN apt-get update && apt-get install -y \
-  wget \
-  git \
-  screen \
-  nano \
-  unzip \
-  xz-utils \
-  ca-certificates \
-  lib32gcc1 \
-  lib32stdc++6 \
-  && rm -rf /var/lib/apt/lists/*
+# Tải bản FiveM mới nhất
+echo "Đang tải FiveM artifacts..."
+LATEST_ARTIFACT=$(curl -s https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/ | grep -o '"[0-9]*-[a-f0-9]*/"' | tr -d '"' | sort | tail -n 1)
+wget -q https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${LATEST_ARTIFACT}/fx.tar.xz
 
-# Cài đặt FiveM
-WORKDIR /fivem
-RUN wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/2991-d9fc7bb0e98c33f4ff7fd0d86399091d6596bfa7/fx.tar.xz \
-  && tar -xvf fx.tar.xz \
-  && rm fx.tar.xz
-
-# Tải và cài đặt các tài nguyên của FiveM từ server của bạn (nếu có)
-# (Đảm bảo bạn có các resource để cài đặt vào server)
-
-# Mở port 30120 cho FiveM
-EXPOSE 30120
-
-# Chạy server FiveM
-CMD ["bash", "run.sh"]
+# Giải nén và chạy
+echo "Đang giải nén..."
+tar xf fx.tar.xz
+echo "Bắt đầu server FiveM..."
+exec ./run.sh
