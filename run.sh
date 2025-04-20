@@ -1,13 +1,14 @@
 #!/bin/bash
-set -e
+set -ex
 
-# Tải bản FiveM mới nhất
-echo "Đang tải FiveM artifacts..."
-LATEST_ARTIFACT=$(curl -s https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/ | grep -o '"[0-9]*-[a-f0-9]*/"' | tr -d '"' | sort | tail -n 1)
-wget -q https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${LATEST_ARTIFACT}/fx.tar.xz
+# Cài đặt các phụ thuộc cần thiết
+apt-get update
+apt-get install -y wget tar xz-utils lib32gcc-s1
+
+# Tải FiveM
+ARTIFACT="5848-4a1ad37603deb75b31d32a5c911fb8b34f6b5d3a"
+wget -q https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${ARTIFACT}/fx.tar.xz
 
 # Giải nén và chạy
-echo "Đang giải nén..."
 tar xf fx.tar.xz
-echo "Bắt đầu server FiveM..."
 exec ./run.sh
