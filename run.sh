@@ -1,4 +1,9 @@
 #!/bin/bash
+chmod +x "$0"  # Tự động cấp quyền khi chạy
+set -e
+
+# Phần còn lại của script...
+#!/bin/bash
 set -e
 
 # Cài đặt dependencies cực kỳ quan trọng
