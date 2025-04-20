@@ -1,13 +1,27 @@
 #!/bin/bash
 set -e
 
-# Cài đặt dependencies
-apt-get update
-apt-get install -y wget tar xz-utils lib32gcc-s1
+# Cài đặt dependencies cực kỳ quan trọng
+echo "🔹 Đang cài đặt dependencies..."
+apt-get update > /dev/null
+apt-get install -y --no-install-recommends \
+    wget \
+    tar \
+    xz-utils \
+    lib32gcc-s1 \
+    > /dev/null
 
-# Tải FiveM (phiên bản cố định ổn định)
-wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/5848-4a1ad37603deb75b31d32a5c911fb8b34f6b5d3a/fx.tar.xz
+# Tải FiveM (phiên bản ổn định đã kiểm nghiệm)
+echo "🔹 Đang tải FiveM artifacts..."
+ARTIFACT="5848-4a1ad37603deb75b31d32a5c911fb8b34f6b5d3a"
+wget -q --show-progress \
+    https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${ARTIFACT}/fx.tar.xz
 
-# Giải nén và chạy
+# Giải nén và chuẩn bị chạy
+echo "🔹 Đang giải nén và khởi động..."
 tar xf fx.tar.xz
+chmod +x run.sh
+
+# Khởi động server
+echo "✅ Server đang khởi động..."
 exec ./run.sh
